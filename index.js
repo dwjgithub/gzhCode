@@ -50,7 +50,7 @@ app.get("/api/wx_openid", async (req, res) => {
   }
 });
 
-app.user(auth())
+app.use(auth())
 const port = process.env.PORT || 80;
 
 async function bootstrap() {
