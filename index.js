@@ -55,6 +55,44 @@ async function bootstrap() {
   await initDB();
   app.listen(port, () => {
     console.log("启动成功", port);
+    const koa = require('koa');
+    const wechat = require('co-wechat')
+    // 公众号服务器
+    const app = new koa();
+    // const wechat  = require('./wechat')
+    const config = require('./config')
+    const api = require('./api')
+    const menuObj = {
+      "button": [
+        {
+          "type": "click",
+          "name": "今日歌曲",
+          "key": "V1001_TODAY_MUSIC"
+        },
+        {
+          "name": "菜单",
+          "sub_button": [
+            {
+              "type": "view",
+              "name": "搜索",
+              "url": "http://www.soso.com/"
+            }
+          ]
+        }
+      ]
+    }
+    const createMenu = async (ctx, next) => {
+      const getMenu = await api.createMenu(menuObj)
+    }
+    createMenu()
+    app.use(wechat(config).middleware(async (message, ctx) => {
+      if (message.Content === '1') {
+        return {
+          type: 'text',
+          content: '你好'
+        }
+      }
+    }))
   });
 }
 
