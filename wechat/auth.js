@@ -5,6 +5,7 @@ module.exports = ()=>{
   return async ctx => {
     if (ctx.method === 'GET') {
       const { signature, echostr, timestamp, nonce } = ctx.query
+      console.log("🚀 ~ ctx.query:", ctx.query)
       const sha1Str =sha1([timestamp, nonce, config.token].join('')) 
       if(sha1Str===ctx.query.signature){
         return ctx.body = echostr
