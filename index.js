@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const { init: initDB, Counter } = require("./db");
+const auth = require("./wechat/auth");
 
 const logger = morgan("tiny");
 
@@ -49,6 +50,7 @@ app.get("/api/wx_openid", async (req, res) => {
   }
 });
 
+app.user(auth())
 const port = process.env.PORT || 80;
 
 async function bootstrap() {
@@ -83,6 +85,7 @@ async function bootstrap() {
     }
     const createMenu = async (ctx, next) => {
       const getMenu = await api.createMenu(menuObj)
+      console.log("🚀 ~ createMenu ~ getMenu:", getMenu)
     }
     createMenu()
     app.use(wechat(config).middleware(async (message, ctx) => {
